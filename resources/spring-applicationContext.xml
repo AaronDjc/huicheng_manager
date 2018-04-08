@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+   	xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	
+	<!-- 
+		Spring 管理的 Bean 可以使用 @Component、@Service、@Repository，不包含 @Controller
+		用 @Controller 的 bean 交给 springMVC配置文件 管理
+		context:include-filter 标签必须配置在  context:exclude-filter 之前
+	-->
+	<context:component-scan base-package="com.huicheng">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+		<!-- 必须配置 exclude-filter 否则  @Controller 注解的类会被 spring 和 springMVC 分别实例化一次 -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<!-- 加载数据库连接的资源文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+	
+	<!-- 数据源 -->
+	<import resource="applicationContext-db.xml"/>
+	
+	<!-- mybatis 配置 -->
+	<import resource="applicationContext-myBaties.xml"/>
+	
+	<!-- myBaties事物管理 -->
+	<import resource="applicationContext-txManagerMyBaties.xml"/>
+</beans>

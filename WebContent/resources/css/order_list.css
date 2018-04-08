@@ -1,0 +1,119 @@
+body{
+	font-family: "Microsoft YaHei";
+}
+
+.payInput{
+	display:inline-block;
+	padding-top:10px;
+}
+
+.payInput>input{
+	width:60px;
+	height: 20px;
+    font-size: 1rem;
+    color: #464a4c;
+    background-color: #fff;
+    background-image: none;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .25rem;
+    margin-left:4px;
+    margin-rigth:4px;
+}
+
+.payUl_tab{
+	list-style:none;
+}
+
+.payUl_tab>li{
+	font-weigth:bold;
+	display:inline-block;
+	cursor:pointer;
+}
+.content{
+	display:none;
+}
+.show{
+	display:block;
+	margin-top:10px;
+}
+
+#billMethod>.modal-item{
+	width:450px;
+}
+.payUl_tab>.active{
+	border-bottom:3px solid black;
+}
+
+.payOption{
+	float: right;
+    width: 180px;
+    display: inline-block;
+    font-size: 14;
+    
+}
+
+.closeModal{
+	float: right;
+}
+
+.filterModal{
+	height: 200px;
+    width: 380px;
+}
+
+.editInput{
+	border:none;
+	background: none;
+	width:100%;
+}
+
+.focusInput{
+	background:#fff;
+	width:100%;
+}
+
+#addFilter{
+	font-size:12px;
+    padding-left: 30px;
+    padding-right: 10px;
+	background:url(../images/add.png) 10px 2px no-repeat;
+}
+
+.divBtn{
+    float: right;
+    width: 255px;
+}
+
+.inputdate{
+	background:url(../images/calendar.png) center right no-repeat;
+}
+
+#filterInfoModal{
+	width: 35%;
+    height: 220px;
+}
+
+table tr{
+    line-height : 12px;
+}
+
+table td{ border:none !important;} 
+
+
+
+#goodsModal{
+	height:300px;
+}
+
+#billingModal,#payMethodModal{
+	height:350px;
+}
+/* .addFilterBox{
+	font-size:12px;
+} */
+
+#paymentModal{
+	height:200px;
+}

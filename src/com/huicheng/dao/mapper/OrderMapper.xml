@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huicheng.dao.OrderDao">
+
+	<!-- 获取所有订单信息 -->
+	<select id="getAllOrders" resultType="OrderInfo">
+		SELECT * FROM order_info WHERE 1=1
+		<if test="orderNo != null and orderNo != ''">
+			AND orderNo like concat('%', #{orderNo}, '%')
+		</if>
+		<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+			AND orderDate between #{startDate} and #{endDate}
+		</if>
+		<if test="documentName != null and documentName != ''">
+			AND documentName like concat('%', #{documentName}, '%')
+		</if>
+		<if test="customerFullName != null and customerFullName != ''">
+			AND customerFullName like concat('%', #{customerFullName}, '%')
+		</if>
+		<if test="projectName != null and projectName != ''">
+			AND projectName like concat('%', #{projectName}, '%')
+		</if>
+		<if test="billCompanyName != null and billCompanyName != ''">
+			AND billCompanyName like concat('%', #{billCompanyName}, '%')
+		</if>
+		<if test="contractNo != null and contractNo != ''">
+			AND contractNo like concat('%', #{contractNo}, '%')
+		</if>
+		<if test="specialPriceApplication != null and specialPriceApplication != ''">
+			AND specialPriceApplication like concat('%', #{specialPriceApplication}, '%')
+		</if>
+		<if test="productCategory != null and productCategory != ''">
+			AND productCategory like concat('%', #{productCategory}, '%')
+		</if>
+		<if test="inquiryNo != null and inquiryNo != ''">
+			AND inquiryNo like concat('%', #{inquiryNo}, '%')
+		</if>
+		
+		<if test="salesman != null and salesman != ''">
+			AND salesman like concat('%', #{salesman}, '%')
+		</if>
+		<if test="region != null and region != ''">
+			AND region like concat('%', #{region}, '%')
+		</if>
+		<if test="customerNum != null and customerNum != ''">
+			AND customerNum like concat('%', #{customerNum}, '%')
+		</if>
+		<if test="customerNo != null and customerNo != ''">
+			AND customerNo like concat('%', #{customerNo}, '%')
+		</if>
+		<if test="orderAttribute != null and orderAttribute != ''">
+			AND orderAttribute like concat('%', #{orderAttribute}, '%')
+		</if>
+		<if test="productName != null and productName != ''">
+			AND productName like concat('%', #{productName}, '%')
+		</if>
+		<if test="model != null and model != ''">
+			AND model like concat('%', #{model}, '%')
+		</if>
+		<if test="deliveryAddress1 != null and deliveryAddress1 != ''">
+			AND deliveryAddress1 like concat('%', #{deliveryAddress1}, '%')
+		</if>
+		<if test="deliveryAddress2 != null and deliveryAddress2 != ''">
+			AND deliveryAddress2 like concat('%', #{deliveryAddress2}, '%')
+		</if>
+		<if test="originalOrder != null and originalOrder != ''">
+			AND originalOrder like concat('%', #{originalOrder}, '%')
+		</if>
+		<if test="referProgramNo != null and referProgramNo != ''">
+			AND referProgramNo like concat('%', #{referProgramNo}, '%')
+		</if>
+		<if test="referOrderNo != null and referOrderNo != ''">
+			AND referOrderNo like concat('%', #{referOrderNo}, '%')
+		</if>
+		<if test="unit != null and unit != ''">
+			AND unit like concat('%', #{unit}, '%')
+		</if>
+		<if test="amount != null and amount != ''">
+			AND amount like concat('%', #{amount}, '%')
+		</if>
+		<if test="totalPrice != null and totalPrice != ''">
+			AND totalPrice like concat('%', #{totalPrice}, '%')
+		</if>
+		LIMIT #{fromIndex}, #{pageSize}
+	</select>
+	
+	<select id="getAllCount" resultType="int">
+		SELECT COUNT(1) FROM order_info WHERE 1=1
+		<if test="orderNo != null and orderNo != ''">
+			AND orderNo like concat('%', #{orderNo}, '%')
+		</if>
+		<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+			AND orderDate between #{startDate} and #{endDate}
+		</if>
+		<if test="documentName != null and documentName != ''">
+			AND documentName like concat('%', #{documentName}, '%')
+		</if>
+		<if test="customerFullName != null and customerFullName != ''">
+			AND customerFullName like concat('%', #{customerFullName}, '%')
+		</if>
+		<if test="projectName != null and projectName != ''">
+			AND projectName like concat('%', #{projectName}, '%')
+		</if>
+		<if test="billCompanyName != null and billCompanyName != ''">
+			AND billCompanyName like concat('%', #{billCompanyName}, '%')
+		</if>
+		<if test="contractNo != null and contractNo != ''">
+			AND contractNo like concat('%', #{contractNo}, '%')
+		</if>
+		<if test="specialPriceApplication != null and specialPriceApplication != ''">
+			AND specialPriceApplication like concat('%', #{specialPriceApplication}, '%')
+		</if>
+		<if test="productCategory != null and productCategory != ''">
+			AND productCategory like concat('%', #{productCategory}, '%')
+		</if>
+		<if test="inquiryNo != null and inquiryNo != ''">
+			AND inquiryNo like concat('%', #{inquiryNo}, '%')
+		</if>
+		
+		<if test="salesman != null and salesman != ''">
+			AND salesman like concat('%', #{salesman}, '%')
+		</if>
+		<if test="region != null and region != ''">
+			AND region like concat('%', #{region}, '%')
+		</if>
+		<if test="customerNum != null and customerNum != ''">
+			AND customerNum like concat('%', #{customerNum}, '%')
+		</if>
+		<if test="customerNo != null and customerNo != ''">
+			AND customerNo like concat('%', #{customerNo}, '%')
+		</if>
+		<if test="orderAttribute != null and orderAttribute != ''">
+			AND orderAttribute like concat('%', #{orderAttribute}, '%')
+		</if>
+		<if test="productName != null and productName != ''">
+			AND productName like concat('%', #{productName}, '%')
+		</if>
+		<if test="model != null and model != ''">
+			AND model like concat('%', #{model}, '%')
+		</if>
+		<if test="deliveryAddress1 != null and deliveryAddress1 != ''">
+			AND deliveryAddress1 like concat('%', #{deliveryAddress1}, '%')
+		</if>
+		<if test="deliveryAddress2 != null and deliveryAddress2 != ''">
+			AND deliveryAddress2 like concat('%', #{deliveryAddress2}, '%')
+		</if>
+		<if test="originalOrder != null and originalOrder != ''">
+			AND originalOrder like concat('%', #{originalOrder}, '%')
+		</if>
+		<if test="referProgramNo != null and referProgramNo != ''">
+			AND referProgramNo like concat('%', #{referProgramNo}, '%')
+		</if>
+		<if test="referOrderNo != null and referOrderNo != ''">
+			AND referOrderNo like concat('%', #{referOrderNo}, '%')
+		</if>
+		<if test="unit != null and unit != ''">
+			AND unit like concat('%', #{unit}, '%')
+		</if>
+		<if test="amount != null and amount != ''">
+			AND amount like concat('%', #{amount}, '%')
+		</if>
+		<if test="totalPrice != null and totalPrice != ''">
+			AND totalPrice like concat('%', #{totalPrice}, '%')
+		</if>
+	</select>
+	
+	<select id="getDeliveryData" resultType="DeliveryInfo">
+		SELECT orderNo,deliveryNum FROM delivery_info
+	</select>
+	
+	<select id="getPaymentData" resultType="PaymentInfo">
+		SELECT orderNo,advancePayment,arrivalPayment,warGoldPayment FROM payment_info
+		WHERE orderNo in
+		<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+		 #{item.orderNo}
+		</foreach>
+	</select>
+	
+	<insert id="addDeliveryInfo">
+		INSERT INTO delivery_info(deliveryNo,orderNo,deliveryDate,deliveryNum,arrivalDate)
+		VALUES(#{deliveryNo},#{orderNo},#{deliveryDate},#{deliveryNum},#{arrivalDate})
+	</insert>
+	
+	<select id="getRemainAmount" resultType="OrderInfo">
+		SELECT remainAmount FROM order_info WHERE orderNo = #{orderNo}
+	</select>
+	
+	<update id="changeInfo">
+		UPDATE order_info 
+			SET remainAmount = #{resultNum},isDelivery = #{isDelivery},payFlag = #{payFlag}
+		WHERE orderNo = #{orderNo}
+	</update>
+	
+	<select id="queryDeliveryInfo" resultType="string">
+		SELECT payMethod FROM payment_info WHERE orderNo = #{orderNo}
+	</select>
+	
+	<select id="queryPayMethod" resultType="string">
+		SELECT b.deliveryDate FROM order_info a,delivery_info b WHERE a.orderNo = b.orderNo
+	</select>
+	
+	<select id="getOrderInfos" resultType="OrderInfo">
+		SELECT orderNo,totalPrice FROM order_info 
+		WHERE customerFullName IN (
+		SELECT DISTINCT customerFullName FROM order_info WHERE orderNo in 
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+		)
+	</select>
+	
+	<!-- <insert id="addPaymentMethodInfo">
+		INSERT INTO	
+			payment_info 
+			(paymentNo,orderNo,prepaidMoney,warranty,warrantyPeriod) 
+		VALUES
+		<foreach collection="list" index="index" item="item" separator=",">
+			(#{item.paymentNo},#{item.orderNo},#{item.prepaidMoney},#{item.warranty},#{item.warrantyPeriod})
+		</foreach>
+	</insert> -->
+	
+	<update id="updatePayInfo" parameterType="java.util.List">  
+      update order_info set  
+      prepaidMoney=  
+      <foreach collection="list" item="item" index="index" separator=" " open="case orderNo" close="end">  
+        when #{item.orderNo,jdbcType=VARCHAR} then #{item.prepaidMoney,jdbcType=DOUBLE}  
+      </foreach>  
+      ,arrivalMoney=  
+      <foreach collection="list" item="item" index="index" separator=" " open="case orderNo" close="end">  
+        when #{item.orderNo,jdbcType=VARCHAR} then #{item.arrivalMoney,jdbcType=DOUBLE}  
+      </foreach> 
+      ,warranty=  
+      <foreach collection="list" item="item" index="index" separator=" " open="case orderNo" close="end">  
+        when #{item.orderNo,jdbcType=VARCHAR} then #{item.warranty,jdbcType=DOUBLE}  
+      </foreach>  
+      ,warrantyPeriod=  
+      <foreach collection="list" item="item" index="index" separator=" " open="case orderNo" close="end">  
+        when #{item.orderNo,jdbcType=VARCHAR} then #{item.warrantyPeriod,jdbcType=VARCHAR}  
+      </foreach>  
+      ,payFlag = 
+      <foreach collection="list" item="item" index="index" separator=" " open="case orderNo" close="end">  
+        when #{item.orderNo,jdbcType=VARCHAR} then #{item.payFlag,jdbcType=VARCHAR}  
+      </foreach>
+      ,payMethod = 
+      <foreach collection="list" item="item" index="index" separator=" " open="case orderNo" close="end">  
+        when #{item.orderNo,jdbcType=VARCHAR} then #{item.payMethod,jdbcType=VARCHAR}  
+      </foreach>  
+      where orderNo in  
+      <foreach collection="list" index="index" item="item" separator="," open="(" close=")">  
+        #{item.orderNo,jdbcType=VARCHAR}  
+      </foreach>  
+  </update>  
+  
+  <update id="updateOrderStatus">
+  	update order_info set  
+      remainAmount=  
+      <foreach collection="list" item="item" index="index" separator=" " open="case orderNo" close="end">  
+        when #{item.orderNo,jdbcType=VARCHAR} then #{item.remainAmount,jdbcType=INTEGER}  
+      </foreach>  
+      ,payFlag=  
+      <foreach collection="list" item="item" index="index" separator=" " open="case orderNo" close="end">  
+        when #{item.orderNo,jdbcType=VARCHAR} then #{item.payFlag,jdbcType=VARCHAR}  
+      </foreach> 
+      where orderNo in  
+      <foreach collection="list" index="index" item="item" separator="," open="(" close=")">  
+        #{item.orderNo,jdbcType=VARCHAR}  
+      </foreach>  
+  </update>
+  
+  <insert id="addDeliveryInfos">
+		INSERT INTO delivery_info
+			(deliveryNo,orderNo,deliveryNum,deliveryMoney,deliveryDate,arrivalDate)
+		VALUES 
+		<foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.deliveryNo},#{item.orderNo},#{item.deliveryNum},#{item.deliveryMoney},#{item.deliveryDate},#{item.arrivalDate})  
+    </foreach>  
+  </insert>
+  
+  <update id="editOrderNoData">
+  	update order_info 
+  		set 
+  		salesman = #{salesman},
+  		projectName = #{projectName},
+  		productNo = #{productNo},
+  		unitPrice = #{unitPrice},
+  		amount = #{amount},
+  		totalPrice = #{totalPrice},
+  		remainAmount = #{newRemainAmount}
+  	where orderNo = #{orderNo}
+  </update>
+  
+  <select id="queryUnitPriceByOrderNo" resultType="OrderInfo">
+  	select unitPrice,amount,totalPrice from order_info where orderNo = #{orderNo} and unitPrice = #{unitPrice}
+  </select>
+  
+  <select id="queryAmountByOrderNo" resultType="OrderInfo">
+  	select unitPrice,amount,totalPrice from order_info where orderNo = #{orderNo} and amount = #{amount}
+  </select>
+  
+  <update id="updateOrderInfoByBill">
+  	update order_info set  
+      remainInvoicesNum=  
+      <foreach collection="list" item="item" index="index" separator=" " open="case orderNo" close="end">  
+        when #{item.orderNo,jdbcType=VARCHAR} then #{item.remainInvoicesNum,jdbcType=INTEGER}  
+      </foreach>  
+      where orderNo in  
+      <foreach collection="list" index="index" item="item" separator="," open="(" close=")">  
+        #{item.orderNo,jdbcType=VARCHAR}  
+      </foreach>  
+  </update>
+  
+  <insert id="addBillInfos">
+		INSERT INTO billing_info
+			(billNo,orderNo,amount,billDate,billCompanyName,invoiceType,invoiceNum,billMoney,deliveryMethod,
+			address,contacts,telephone,expressNo,mailDate)
+		VALUES 
+		<foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.billNo},#{item.orderNo},#{item.amount},#{item.billDate},#{item.billCompanyName},
+        #{item.invoiceType},#{item.invoiceNum},#{item.billMoney},#{item.deliveryMethod},#{item.address},#{item.contacts},
+        #{item.telephone},#{item.expressNo},#{item.mailDate}
+        )  
+    </foreach>  
+  </insert>
+</mapper>

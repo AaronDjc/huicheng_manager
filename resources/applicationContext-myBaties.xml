@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- 管理myBatis的sessionFactory, spring 集成 mybatis，需要导包：mybatis-spring-1.1.1.jar -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!--  
+			映射实体类的路径 
+			配置该属性之后，在mapper.xml 文件当中可以直接使用类名，不用再写 package.className
+		-->
+		<property name="typeAliasesPackage" value="com.huicheng.pojo"></property>
+		<!-- 
+			mybatis的映射文件路径(可选)
+			如果没有配置该项，则必须在扫描范围包下写.xml文件  文件名称还必须与 dao 接口名称一致 
+		-->
+		<property name="mapperLocations" value="classpath:com/huicheng/dao/mapper/*.xml" />
+	</bean>
+	
+	<!-- 映射扫描范围 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.huicheng.dao" />
+	</bean>
+</beans>

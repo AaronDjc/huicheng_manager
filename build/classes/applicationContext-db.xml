@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+	<!-- 配置数据源   dbcp数据库连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${datasource.driverClassName}" />
+		<property name="jdbcUrl" value="${datasource.url}" />
+		<property name="user" value="${datasource.username}" />
+		<property name="password" value="${datasource.password}" />
+
+		<property name="minPoolSize" value="${minPoolSize}" />
+		<property name="maxPoolSize" value="${maxPoolSize}" ></property>
+		<property name="initialPoolSize" value="${initialPoolSize}" />
+		<property name="acquireIncrement" value="${acquireIncrement}" ></property>
+		<property name="maxIdleTime" value="${maxIdleTime}" />
+		<property name="maxStatements" value="${maxStatements}" />
+		<property name="idleConnectionTestPeriod" value="${idleConnectionTestPeriod}" />
+		<property name="acquireRetryAttempts" value="${acquireRetryAttempts}" />
+		<property name="breakAfterAcquireFailure" value="${breakAfterAcquireFailure}" />
+		<property name="testConnectionOnCheckout" value="${testConnectionOnCheckout}" />
+		<property name="autoCommitOnClose" value="${autoCommitOnClose}"></property>
+	</bean>
+</beans>

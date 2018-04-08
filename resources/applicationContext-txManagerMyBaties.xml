@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd 
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<bean id="txManagerMyBaties" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 配置事务增强处理 -->
+	<tx:advice id="txAdviceMyBaties" transaction-manager="txManagerMyBaties">
+		<!-- 配置事务属性 -->
+		<tx:attributes>
+			<tx:method name="add*" read-only="false"/>
+			<tx:method name="edit*" read-only="false"/>
+			<tx:method name="remove*" read-only="false"/>
+			<tx:method name="del*" read-only="false"/>
+			<tx:method name="upload*" read-only="false"/>
+			<tx:method name="*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<!-- 配置切入点 -->
+		<aop:pointcut id="allServiceMethodMyBaties" expression="execution(public * com.huicheng.service..*.*(..))"/>
+		<!-- 将事务增强处理与切入点进行关联 -->
+		<aop:advisor advice-ref="txAdviceMyBaties" pointcut-ref="allServiceMethodMyBaties"/>
+	</aop:config>
+</beans>

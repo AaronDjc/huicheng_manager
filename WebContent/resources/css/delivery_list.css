@@ -1,0 +1,11 @@
+#viewBillingModal{
+	height:350px;
+}
+
+#paymentModal{
+	height:200px;
+}
+
+span.textbox-addon.textbox-addon-right{
+	float:right;
+}

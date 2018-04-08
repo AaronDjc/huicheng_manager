@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huicheng.dao.BillingDao">
+
+	<!-- 获取所有订单信息 -->
+	<select id="getBillingInfo" resultType="BillInfo">
+		SELECT 
+			b.*,f.projectName,f.contractNo,f.unitPrice,f.unit,f.customerFullName
+		FROM billing_info b left join order_info f on b.orderNo = f.orderNo WHERE 1=1
+		<if test="orderNo != null and orderNo != ''">
+			AND orderNo like concat('%', #{orderNo}, '%')
+		</if>
+		LIMIT #{fromIndex}, #{pageSize}
+	</select>
+	
+	<select id="getCountBillingInfo" resultType="int">
+		SELECT COUNT(1) FROM billing_info WHERE 1=1
+		<if test="orderNo != null and orderNo != ''">
+			AND orderNo like concat('%', #{orderNo}, '%')
+		</if>
+	</select>
+	
+	<insert id="addBillInfos">
+		INSERT INTO billing_info
+			(billNo,orderNo,amount,billDate,billCompanyName,invoiceType,invoiceNum,billMoney,deliveryMethod,
+			address,contacts,telephone,expressNo,mailDate)
+		VALUES 
+        (#{billNo},#{orderNo},#{amount},#{billDate},#{billCompanyName},
+        #{invoiceType},#{invoiceNum},#{billMoney},#{deliveryMethod},#{address},#{contacts},
+        #{telephone},#{expressNo},#{mailDate})  
+  </insert>
+</mapper>
