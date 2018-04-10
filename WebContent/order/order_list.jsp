@@ -36,6 +36,7 @@
 					<input id="orderNo" name="orderNo" type="text">
 				</div>
 				<div class="item">
+				<label>sheng</label>
 					<label for="startDate">订单日期:</label>
 					<input id="startDate" type="text" class="inputdate" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'endDate\')}'})">
 					<label for="endDate">-</label>
