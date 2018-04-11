@@ -1,7 +1,6 @@
 
 var filterLength = undefined;
 $(document).ready(function(){
-	console.log('这是测试这是测试!!!这是测试这是测试!!!这是测试这是测试!!!');
 	//初始化订单表
 	initOrder();
 	filterLength = $(".search .item").length;

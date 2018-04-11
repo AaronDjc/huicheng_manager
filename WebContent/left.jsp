@@ -17,12 +17,19 @@
 <script type="text/javascript" src="resources/js/jquery-3.0.0.min.js"></script>
 <script type="text/javascript" src="resources/js/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="resources/js/jquery.datagrid.js"></script>
-
+<script type="text/javascript">
+$(function(){
+	$('li.group_menu > a').on('click', function(){
+		$(this).parent().siblings().removeClass('active');
+		$(this).parent().addClass('active');
+	});
+});
+</script>
 </head>
 	<body>
 		<div id="left">
 			<ul class="menuhome">
-				 <li class="active group_menu firstLi">
+				 <li class="active group_menu">
 					<!-- <img src="resources/images/order.png"></img> -->
 					<a href="order/order_list.jsp" target="mainframe" class="orderTag">订单管理</a>
 				</li>
