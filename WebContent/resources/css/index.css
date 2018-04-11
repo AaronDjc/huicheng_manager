@@ -13,21 +13,24 @@
     padding: 0;
 }
 
-.menuhome>.firstLi {
-   margin-top: 27px;
+.menuhome li a{
+    padding-left:43px;
+    text-decoration:none;
+    color:#008CBA;
+    line-height: 50px;
+}
+
+ul.menuhome li.active{
+    background-color: #98CDE3;
+}
+ul.menuhome li.active > a {
+    color: #efefef;
 }
 
 .menuhome>.group_menu {
-    margin-bottom: 40px;
-	margin-left: 20px;
+	padding : 15px 20px 15px 20px;
 	font-size: 16px;
 	font-family:"Microsoft YaHei"
-}
-
-.menuhome li a{
-	padding-left:43px;
-	text-decoration:none;
-	color:#008CBA;
 }
  
 .menuhome .orderTag{
