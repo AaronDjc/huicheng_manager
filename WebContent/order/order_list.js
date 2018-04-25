@@ -1,7 +1,8 @@
 
 var filterLength = undefined;
 $(document).ready(function(){
-	//初始化订单表
+	
+	//初始化订单表  testoun
 	initOrder();
 	filterLength = $(".search .item").length;
 	/*$(".payUl_tab li").on('click',function(){
@@ -62,12 +63,12 @@ function initOrder(){
 				{field:'payMethod',title:'付款方式',align:'center',width:'10%'},
 				{field:'payFlag',title:'是否可修改付款方式',align:'center',width:'13%',hidden:true},
 				//{field:'prepaidMoney',title:'预付金额',align:'center',width:'6%'},
-				{field:'advanceTotalPayment',title:'预收回款',align:'center',width:'6%'},
+				{field:'advanceTotalPayment',title:'预收货款',align:'center',width:'6%'},
 				//{field:'arrivalMoney',title:'应收金额',align:'center',width:'6%'},
-				{field:'arrivalTotalPayment',title:'应收回款',align:'center',width:'6%'},
+				{field:'arrivalTotalPayment',title:'应收货款',align:'center',width:'6%'},
 				//{field:'warrantyGold',title:'质保金额',align:'center',width:'6%'},
-				{field:'warGoldTotalPayment',title:'质保金回款',align:'center',width:'6%'},
-				{field:'warrantyPeriod',title:'质保期限(年)',align:'center',width:'7%'},
+				{field:'warGoldTotalPayment',title:'质保金',align:'center',width:'6%'},
+				{field:'warrantyPeriod',title:'质保金到期日',align:'center',width:'7%'},
 				{field:'region',title:'地区',align:'center',width:'5%'},
 				/*{field:'salesman',title:'业务员',align:'center',width:'5%',formatter:function(value){
 					return '<input onfocus="checkGetfocus(this)" onblur="checkValue(this)" class="editInput" type="text" value="'+value+'">';
@@ -599,6 +600,71 @@ $(function() {
 		$(".dialog_content").hide();
     });
 	
+	$("#importExcel").on('click',function(){
+		$("#importBoard").css('display','block');
+	})
+	
+	 $("#uploadEventBtn").on("click",function(){  
+         $("#uploadEventFile").click();  
+     });  
+     $("#uploadEventFile").bind("change",function(){  
+         $("#uploadEventPath").attr("value",$("#uploadEventFile").val());  
+     }); 
+     
+     $("#file_form").submit(
+             function() {
+                 //首先验证文件格式
+                /* var fileName = $('#file_input').val();
+                 if (fileName === '') {
+                     alert('请选择文件');
+                     return false;
+                 }*/
+                 
+                 var uploadEventFile = $("#uploadEventFile").val();  
+                 if(uploadEventFile == ''){  
+                     $.messager.alert("编辑提示", "请选择excel,再上传");
+                 }else if(uploadEventFile.lastIndexOf(".xls")<0){//可判断以.xls和.xlsx结尾的excel  
+                     $.messager.alert("编辑提示", "只能上传Excel文件");
+                 }else{  
+                	 $("#file_form").ajaxSubmit({
+                         dataType : "json",
+                         success : function(data, textStatus) {
+                             if (data['result'] === 'OK') {
+                                 console.log('上传文件成功');
+                             } else {
+                                 console.log('文件格式错误');
+                             }
+                             return false;
+                         }
+                     });
+                 }  
+               //  return false;
+             });
+     
+  	$("#fileuploadBTN").click(function(){
+		 $.ajaxFileUpload({
+	            url: 'order/upload.do', 
+	            type: 'post',
+	            secureuri: false, //一般设置为false
+	            fileElementId: 'fileupload', // 上传文件的id、name属性名
+	            dataType: 'text', //返回值类型，一般设置为json、application/json
+//	            elementIds: elementIds, //传递参数到服务器
+	            success: function(data){
+	            	/*var date = eval("("+data+")");
+	                alert(date.msg);*/
+	            	if(data == 'SUCCESS'){
+	            		$.messager.alert("编辑提示", "信息导入成功");
+	            		$("#orderTable").datagrid('reload');  
+	            	}else{
+	            		$.messager.alert("编辑提示", "信息导入失败");
+	            	}
+	            },
+	            error: function(data, status, e){ 
+	                alert(e);
+	            }
+	        });
+	})
+	
 });
 
 
@@ -834,6 +900,36 @@ function getBillMoneyValue(){
 	
 }
 
+/*function uploadBtn(){
+	var uploadEventFile = $("#uploadEventFile").val();  
+    if(uploadEventFile == ''){  
+        $.messager.alert("编辑提示", "请选择excel,再上传");
+    }else if(uploadEventFile.lastIndexOf(".xls")<0){//可判断以.xls和.xlsx结尾的excel  
+        $.messager.alert("编辑提示", "只能上传Excel文件");
+    }else{  
+        var url =  '/order/upload.do';  
+        var formData = new FormData($("#batchUpload"));  
+        sendAjaxRequest(url,'POST',formData);  
+    }  
+}
+
+function sendAjaxRequest(url,type,data){
+    $.ajax({  
+        url : url,  
+        type : type,  
+        data : data,  
+        success : function(result) {  
+            alert( result);  
+        },  
+        error : function() {  
+            alert( "excel上传失败");  
+        },  
+        cache : false,  
+        contentType : false,  
+        processData : false  
+    });  
+};  
+*/
 
 
 
