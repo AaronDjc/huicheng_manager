@@ -44,7 +44,7 @@ public class OrderInfo {
 	private String salesman;
 	
 	//订单属性
-	private Integer orderAttribute;
+	private String orderAttribute;
 
 	//客户全称
 	private String customerFullName;
@@ -371,11 +371,11 @@ public class OrderInfo {
 		this.referOrderNo = referOrderNo;
 	}
 
-	public Integer getOrderAttribute() {
+	public String getOrderAttribute() {
 		return orderAttribute;
 	}
 
-	public void setOrderAttribute(Integer orderAttribute) {
+	public void setOrderAttribute(String orderAttribute) {
 		this.orderAttribute = orderAttribute;
 	}
 
