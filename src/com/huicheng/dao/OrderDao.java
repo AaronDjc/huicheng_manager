@@ -53,4 +53,6 @@ public interface OrderDao {
 	public int updateOrderInfoByBill(List<OrderInfo> orderList);
 	
 	public int addBillInfos(List<BillInfo> billInfoList);
+	
+	public int addExcelData(List<OrderInfo> orderList);
 }
