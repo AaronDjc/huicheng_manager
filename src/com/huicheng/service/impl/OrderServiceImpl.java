@@ -1,5 +1,9 @@
 package com.huicheng.service.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,17 +14,27 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.huicheng.dao.OrderDao;
 import com.huicheng.pojo.BillInfo;
 import com.huicheng.pojo.DeliveryInfo;
 import com.huicheng.pojo.OrderInfo;
 import com.huicheng.pojo.PaymentInfo;
 import com.huicheng.service.OrderService;
+import com.huicheng.util.ExcelUtil;
 import com.huicheng.util.IdCreateTools;
 
 import net.sf.json.JSONArray;
@@ -28,6 +42,13 @@ import net.sf.json.JSONObject;
 
 @Service
 public class OrderServiceImpl implements OrderService{
+	
+	private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
+	
+	public static String[] orderInfoArr = {"orderMonth","documentName","orderDate","orderNo","customerNum","region","salesman",
+			"customerNo","orderAttribute","customerFullName","projectName","productNo","productCategory",
+			"productName","model","amount","unit","unitPrice","totalPrice","deliveryAddress1","deliveryAddress2",
+			"specialRemark","plugNum","originalOrder","inquiryNo","referProgramNo","referOrderNo","predeliveryDate"};
 	
 	@Autowired
 	private OrderDao orderDao;
@@ -105,6 +126,14 @@ public class OrderServiceImpl implements OrderService{
 	//	List<DeliveryInfo> list = orderDao.getDeliveryData();
 		if(CollectionUtils.isNotEmpty(rows)){
 			List<PaymentInfo> list = orderDao.getPaymentData(rows);
+			int totalAmount = 0;
+			int totalRemainAmount = 0;
+			double totalAllMoney = 0;
+			double deliAllMoney = 0;
+			double billAllMoney = 0;
+			double payAllMoney=0;
+			double totalAllBalance=0;
+			int remainAllInvoicesNum = 0;
 			Integer deliveryNum = 0;
 			Integer billingNum = 0;
 			Double paymentMoney = 0.00;
@@ -138,7 +167,27 @@ public class OrderServiceImpl implements OrderService{
 				order.setWarGoldTotalPayment(warGoldTotalPayment);
 				order.setPaymentTotalPrice(paymentMoney);
 				order.setTotalBalance(order.getTotalPrice()-paymentMoney);
+				totalAmount = totalAmount+Integer.valueOf(order.getAmount());//订单货物数量总计
+				totalRemainAmount = totalRemainAmount+Integer.valueOf(order.getRemainAmount());//剩余货物数量总计
+				totalAllMoney = totalAllMoney+order.getTotalPrice();//订单金额总计
+				deliAllMoney = deliAllMoney+order.getDeliveryTotalPrice();//发货额总计
+				remainAllInvoicesNum +=order.getRemainInvoicesNum();//剩余开票货物数量总计
+				billAllMoney = billAllMoney+order.getBillingTotalPrice();//开票额总计
+				payAllMoney = payAllMoney+order.getPaymentTotalPrice();//回款总计
+				totalAllBalance = totalAllBalance+order.getTotalBalance();//余额总计
 			}
+			
+			OrderInfo orderSum = new OrderInfo();
+			orderSum.setAmount(totalAmount);
+			orderSum.setRemainAmount(totalRemainAmount);
+			orderSum.setTotalPrice(totalAllMoney);
+			orderSum.setDeliveryTotalPrice(deliAllMoney);
+			orderSum.setRemainInvoicesNum(remainAllInvoicesNum);
+			orderSum.setBillingTotalPrice(billAllMoney);
+			orderSum.setPaymentTotalPrice(payAllMoney);
+			orderSum.setTotalBalance(totalAllBalance);
+			orderSum.setOrderNo("总计");
+			rows.add(orderSum);
 		}
 	
 		
@@ -413,4 +462,135 @@ public class OrderServiceImpl implements OrderService{
 		}
 	}
 
+	@Override  
+    public String uploadExcelFile(MultipartFile file) {  
+		String fileName = file.getOriginalFilename();//获取文件名  
+        try {  
+            if (!ExcelUtil.validateExcel(fileName)) {// 验证文件名是否合格  
+                return null;  
+            }  
+            boolean isExcel2003 = true;// 根据文件名判断文件是2003版本还是2007版本  
+            if (ExcelUtil.isExcel2007(fileName)) {  
+                isExcel2003 = false;  
+            }  
+            List<OrderInfo> orderList = createExcel(file.getInputStream(), isExcel2003); 
+            if(CollectionUtils.isNotEmpty(orderList)){
+            	int k = orderDao.addExcelData(orderList);
+            	if(k > 0 ){  
+                    return "SUCCESS";  
+    	        }else{  
+    	        	return "FAIL";   
+    	        }
+            }
+        } catch (Exception e) {  
+        	LOG.info("导入Excel失败："+e.toString());
+        }  
+        return "FAIL";  
+    }  
+	
+	public List<OrderInfo> createExcel(InputStream is, boolean isExcel2003) {  
+        try{  
+            Workbook wb = null;  
+            if (isExcel2003) {// 当excel是2003时,创建excel2003  
+                wb = new HSSFWorkbook(is);  
+            } else {// 当excel是2007时,创建excel2007  
+            	wb = new XSSFWorkbook(is);
+            }  
+            @SuppressWarnings("unused")
+			List<OrderInfo> orderList = readExcelValue(wb);// 读取Excel里面客户的信息  
+            return orderList;
+        } catch (IOException e) {  
+        	LOG.info("导入Excel异常");
+        }  
+        return new ArrayList<OrderInfo>();  
+    } 
+	
+	 private List<OrderInfo> readExcelValue(Workbook wb) {  
+        // 得到第一个shell  
+        Sheet sheet = wb.getSheetAt(0);  
+        // 得到Excel的行数  
+        int totalRows = sheet.getPhysicalNumberOfRows();  
+        // 得到Excel的列数(前提是有行数)  
+        int totalCells = 0;
+        if (totalRows > 1 && sheet.getRow(0) != null) {  
+            totalCells = sheet.getRow(0).getPhysicalNumberOfCells();  
+        }  
+        List<OrderInfo> orderList = new ArrayList<OrderInfo>();  
+        
+        // 循环Excel行数  
+        for (int r = 1; r < totalRows; r++) {  
+            Row row = sheet.getRow(r);  
+            if (row == null || row.getFirstCellNum() == -1){  
+                continue;  
+            }  
+            OrderInfo order = new OrderInfo();  
+            // 添加到list  
+            try {
+            	orderList.add(dataObj(order,row));
+			} catch (Exception e) {
+				LOG.info("数据导入异常：异常在"+r+"行"+"；"+e.toString());
+			}  
+        }  
+        return orderList;  
+    }
+	 
+	 private  static  OrderInfo  dataObj(OrderInfo obj, Row row) throws Exception {    
+	 	Class clazz = obj.getClass();       
+        Field[] fields = clazz.getDeclaredFields();    
+        Field remainAmount = clazz.getDeclaredField("remainAmount");
+        Field remainInvoicesNum = clazz.getDeclaredField("remainInvoicesNum");
+        remainAmount.setAccessible(true);
+        remainInvoicesNum.setAccessible(true);
+        if (fields != null && fields.length > 0) {    
+            //注意excel表格字段顺序要和obj字段顺序对齐 （如果有多余字段请另作特殊下标对应处理）   
+            for(int i =0;i<orderInfoArr.length;i++){
+            	for (int j = 0; j < fields.length; j++) {  
+            		fields[j].setAccessible(true);
+                	if(orderInfoArr[i].equalsIgnoreCase(fields[j].getName())){
+                		String a = getVal(row.getCell(i));
+                		if(StringUtils.isNotBlank(a)){
+                			if(fields[j].getType().getName().equals("java.lang.Double")){
+                				fields[j].set(obj,Double.valueOf(a));
+                    		}else if(fields[j].getType().getName().equals("java.lang.Integer")){
+                    			int k = a.indexOf('.');
+                    			String b = k>-1?a.substring(0, k):a;
+                    			if(fields[j].getName().equals("customerNo") ||fields[j].getName().equals("productNo")){
+                    				fields[j].set(obj,b);
+                    			}else{
+                    				fields[j].set(obj,Integer.valueOf(b));
+                    				if("amount".equals(orderInfoArr[i])){
+                    					remainAmount.set(obj,Integer.valueOf(b));
+                    					remainInvoicesNum.set(obj,Integer.valueOf(b));
+                    				}
+                    			}
+                    		}else{
+                				fields[j].set(obj,a);
+                    		}
+                    		 
+                    		break;
+                		}
+                	}
+                }
+        	} 
+        } 
+        return obj;
+    }  
+	 
+	 public static String firstLetterToUpper(String str) {
+		if (str == null || str.trim().equals("")) {
+			return "";
+		}
+		return new StringBuilder(str.substring(0,1).toUpperCase())
+			.append(str.substring(1)).toString();
+	}
+	 
+	 public static String getVal(Cell hssfCell) {    
+		 if (hssfCell.getCellType() == HSSFCell.CELL_TYPE_STRING) {    
+			 return hssfCell.getStringCellValue();    
+		 } else if(hssfCell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC ||hssfCell.getCellType() == HSSFCell.CELL_TYPE_FORMULA){    
+			 return String.valueOf(hssfCell.getNumericCellValue());    
+		 } else {
+			 return "";
+		 }
+	 }  
 }
