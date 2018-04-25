@@ -23,6 +23,8 @@
 <script type="text/javascript" src="resources/js/jquery.datagrid.js"></script>
 <script type="text/javascript" src="resources/js/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="<%=path%>/resources/My97DatePicker/WdatePicker.js"></script>
+<!-- ajaxfileupload 引入 -->
+<script type="text/javascript" src="resources/js/ajaxfileupload.js"></script>
 <script type="text/javascript" src="order/order_list.js"></script>
 
 </head>
@@ -36,7 +38,6 @@
 					<input id="orderNo" name="orderNo" type="text">
 				</div>
 				<div class="item">
-				<label>sheng</label>
 					<label for="startDate">订单日期:</label>
 					<input id="startDate" type="text" class="inputdate" onFocus="WdatePicker({maxDate:'#F{$dp.$D(\'endDate\')}'})">
 					<label for="endDate">-</label>
@@ -144,7 +145,7 @@
             </div>
             <div class="modalBody">
             <label><input id="billingInput" name="moneyAction" type="radio" value="1" checked>款到发货 </label> 
-	            	<label><input id="goodsInput" name="moneyAction" type="radio" value="2">货到付款 </label> 
+	            	<label><input id="goodsInput" name="moneyAction" type="radio" value="2">票到付款 </label> 
 				<form id="sdffsf" method="post" style="margin-left:8px;">
 	            <div id="goodsMethod" class="content" style="margin-left:8px;">
 		            <div class="modal-item">
@@ -344,5 +345,18 @@
 	
 	<!-- 遮罩层 -->
 	<div class="dialog_content"></div>
+	
+	<div id="importBoard" style="width:600px;height:400px;display:none;">
+		<%-- <form enctype="multipart/form-data" id="file_form"  action="<%=request.getContextPath()%>/order/upload.do" method="post" class="form-horizontal">    
+    		<button class="btn btn-success btn-xs" id="uploadEventBtn" style="height:26px;"  type="button" >选择文件</button>  
+    		<input type="file" name="file"  style="width:0px;height:0px;" id="uploadEventFile">  
+    		<input id="uploadEventPath"  disabled="disabled"  type="text" placeholder="请选择excel表" style="border: 1px solid #e6e6e6; height: 26px;width: 200px;" >                                           
+		</form>  
+		<!-- <button type="button" class="btn btn-success btn-sm"  onclick="uploadBtn()" >上传</button> -->  
+		<input type="submit" value="文件上传" id='upFile-btn'> --%>
+		<input id="fileupload" type="file" name ="upfile" />
+        <a href="javascript:void(0)" id="fileuploadBTN">上传</a>
+	</div>
+	
 </body>
 </html>
