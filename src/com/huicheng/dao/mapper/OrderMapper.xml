@@ -321,4 +321,23 @@
         )  
     </foreach>  
   </insert>
+  
+  <insert id="addExcelData">
+		INSERT INTO order_info
+			(orderMonth,documentName,orderDate,orderNo,customerNum,region,salesman,
+			customerNo,orderAttribute,customerFullName,projectName,productNo,productCategory,
+			productName,model,amount,unit,unitPrice,totalPrice,deliveryAddress1,deliveryAddress2,
+			specialRemark,plugNum,originalOrder,inquiryNo,referProgramNo,referOrderNo,predeliveryDate,createTime,remainAmount,remainInvoicesNum)
+		VALUES 
+		<foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.orderMonth},#{item.documentName},#{item.orderDate},#{item.orderNo},#{item.customerNum},
+        #{item.region},#{item.salesman},#{item.customerNo},#{item.orderAttribute},#{item.customerFullName},#{item.projectName},
+        #{item.productNo},#{item.productCategory},#{item.productName},#{item.model},#{item.amount},#{item.unit},
+        #{item.unitPrice},#{item.totalPrice},#{item.deliveryAddress1},
+        #{item.deliveryAddress2},#{item.specialRemark},#{item.plugNum},
+        #{item.originalOrder},#{item.inquiryNo},#{item.referProgramNo},
+        #{item.referOrderNo},#{item.predeliveryDate},now(),#{item.remainAmount},#{item.remainInvoicesNum}
+        )  
+    </foreach>  
+  </insert>
 </mapper>
