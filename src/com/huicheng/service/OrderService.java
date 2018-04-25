@@ -3,6 +3,8 @@ package com.huicheng.service;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.multipart.MultipartFile;
+
 
 public interface OrderService {
 
@@ -19,5 +21,7 @@ public interface OrderService {
 	public String addPayMethodInfo(HttpServletRequest req);
 	
 	public String editOrderNoData(HttpServletRequest req);
+	
+	public String uploadExcelFile(MultipartFile file);
 		
 }
